@@ -3,6 +3,6 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-signed int port_parse(__uint32_t port);
+int port_parse(int port);
 
 #endif // NETWORK_H
