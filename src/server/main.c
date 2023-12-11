@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "args.h"
-#include "core.h"
+#include "headers/core.h"
+#include "headers/args.h"
 
 int main(int argc, char **argv) // argv is array of arrays of chars meaning string[] in high level
 {
