@@ -15,12 +15,16 @@ int arg_parse(int argc, char **argv, __uint32_t *port)
 
 			start[0] = '\0';
 			strncpy(start, argv[++i], sizeof(start)-1);
-			*port = (__uint32_t)strtol(start, &endPtr, 10);
+			*port = (__uint32_t)strtol(start, &endPtr, 10); // endPtr = first character in the string that couldn't be converted *1
 
 			if (port_parse(*port) <= 0)
+			{
         return -1;
+			}
 		}
 	}
 
   return 1;
 }
+
+// *1 -> If "431Fourteentwe3lve" was passed, a char * (a string in High level) will be made with "Fourteentwelve" and integer 4313 will be parsed to the first argument (start)
