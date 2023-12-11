@@ -1,12 +1,11 @@
-#include "args.h"
-#include "network.h"
+#include "headers/args.h"
+#include "headers/network.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 int arg_parse(int argc, char **argv, __uint32_t *port)
 {
-	fprintf(stdout, "argc length: %d\n", argc);
 	if (argc <= 2)
 		return -2;
 
