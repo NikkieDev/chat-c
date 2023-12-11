@@ -5,7 +5,7 @@
 #define NETWORK_H
 
 int port_parse(int port);
-int try_connect(int port);
+int start_server(int port);
 void accept_user(client *u);
 
 #endif // NETWORK_H

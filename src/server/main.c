@@ -18,7 +18,7 @@ int main(int argc, char **argv) // argv is array of arrays of chars meaning stri
 	if (arg_desc <= 0)
 		exitc(arg_desc, "INVALID_ARGUMENTS");
 	
-	int socket_fd = try_connect(port);
+	int socket_fd = start_server(port);
 	int listening = listen(socket_fd, MAX_USERS);
 	int users = 0;
 
@@ -34,6 +34,5 @@ int main(int argc, char **argv) // argv is array of arrays of chars meaning stri
 		pthread_create(&thid, NULL, accept_user, &user);
 		pthread_join(thid, NULL);
 		users++;
-		fprintf(stdout, "Users: %d\n", users);
 	}
 }

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <string.h>
 
 signed int port_parse(int port)
 {
@@ -13,7 +14,7 @@ signed int port_parse(int port)
   else return 1;
 }
 
-signed int try_connect(int port)
+signed int start_server(int port)
 {
   int s = socket(AF_INET, SOCK_STREAM, 0);
   struct sockaddr_in addr = {
@@ -31,11 +32,16 @@ void accept_user(client *user)
 {
   printf("accepted: %d\n", user->num);
 
-  while (user->socket_fd <= 0)
-  {
-    recv(user->socket_fd, user->buffer, sizeof(user->buffer), 0);
-    printf("[USER-%d]: %s\n", user->num, user->buffer);
-  }
+  // while (user->socket_fd > 0)
+  // {
+  //   recv(user->socket_fd, user->buffer, sizeof(user->buffer), 0);
+  //   if (strncmp(user->buffer, "quit", 5) == 0)
+  //   {
+  //     printf("received quit from user, disconnecting user.");
+  //     close(user->socket_fd);
+  //     pthread_exit(NULL);
+  //   }
+  // }
 
   pthread_exit(NULL);
 }
