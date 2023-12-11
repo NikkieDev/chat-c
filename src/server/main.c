@@ -20,14 +20,15 @@ int main(int argc, char **argv) // argv is array of arrays of chars meaning stri
 	
 	int socket_fd = try_connect(port);
 	int listening = listen(socket_fd, MAX_USERS);
+	int users = 0;
 
 	while (listening == 0)
 	{
-		fprintf(stdout, "LISTENING\n");
-		sleep(1);
-		accept_user(socket_fd);
+		pthread_t thid;
+
+		pthread_create(&thid, NULL, accept_user, accept(socket_fd, 0, 0));
+		pthread_join(thid, NULL);
+		users++;
+		fprintf(stdout, "Users: %d\n", users);
 	}
-		// pthread_t thid;
-		// pthread_create(thid, NULL, accept_user, NULL);
-		// pthread_join(thid, NULL);
 }

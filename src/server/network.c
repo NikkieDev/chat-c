@@ -26,8 +26,10 @@ signed int try_connect(int port)
   return s;
 }
 
-void accept_user(int socket_fd)
+void accept_user(int accepted_fd)
 {
-  accept(socket_fd, 0, 0);
-  printf("SOCKET_FD: %d", socket_fd);
+  printf("accepted: %d\n", accepted_fd);
+  // close(accepted_fd);
+
+  pthread_exit(NULL);
 }
