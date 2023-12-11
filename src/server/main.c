@@ -25,8 +25,13 @@ int main(int argc, char **argv) // argv is array of arrays of chars meaning stri
 	while (listening == 0)
 	{
 		pthread_t thid;
+		client user = {
+			.num = users+1,
+			.socket_fd = socket_fd,
+			.client_fd = accept(socket_fd, 0, 0)
+		};
 
-		pthread_create(&thid, NULL, accept_user, accept(socket_fd, 0, 0));
+		pthread_create(&thid, NULL, accept_user, &user);
 		pthread_join(thid, NULL);
 		users++;
 		fprintf(stdout, "Users: %d\n", users);

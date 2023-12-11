@@ -1,4 +1,5 @@
 #include "headers/network.h"
+#include "headers/core.h"
 #include <stdio.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -26,10 +27,15 @@ signed int try_connect(int port)
   return s;
 }
 
-void accept_user(int accepted_fd)
+void accept_user(client *user)
 {
-  printf("accepted: %d\n", accepted_fd);
-  // close(accepted_fd);
+  printf("accepted: %d\n", user->num);
+
+  while (user->socket_fd <= 0)
+  {
+    recv(user->socket_fd, user->buffer, sizeof(user->buffer), 0);
+    printf("[USER-%d]: %s\n", user->num, user->buffer);
+  }
 
   pthread_exit(NULL);
 }
