@@ -4,14 +4,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-int arg_parse(int argc, char **argv, __uint32_t *port)
+int arg_parse(int argc, char **argv, unsigned int *port)
 {
 	if (argc <= 2)
 		return -2;
 
 	for (int i = 0; i < argc; i++)
 	{
-		// fprintf(stdout, "checking '%s'\n", argv[i]);
 		if (strncmp(argv[i], "-p", 2) == 0)
 		{
 			char start[6];

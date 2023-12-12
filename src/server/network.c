@@ -1,9 +1,18 @@
 #include "headers/network.h"
 #include "headers/core.h"
 #include <stdio.h>
+#include <string.h>
+
+#if defined(WIN32)
+#include <WinSock2.h>
+#include <ws2tcpip.h>
+#endif
+
+#ifdef __unix__
 #include <netinet/in.h>
 #include <sys/socket.h>
-#include <string.h>
+#endif
+
 
 signed int port_parse(int port)
 {
@@ -18,9 +27,9 @@ signed int start_server(int port)
 {
   int s = socket(AF_INET, SOCK_STREAM, 0);
   struct sockaddr_in addr = {
-    .sin_family = AF_INET,
-    .sin_addr = 0,
-    .sin_port = htons(port)
+    AF_INET,
+    htons(port),
+    0
   };
 
   bind(s, &addr, sizeof(addr));

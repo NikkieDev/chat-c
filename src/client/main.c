@@ -1,9 +1,17 @@
+#if defined(WIN32)
+#include <WinSock2.h>
+#include <ws2tcpip.h>
+#endif
+
+#ifdef __unix__
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#endif
+
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
 
 void write_server(int sock_fd)
 {

@@ -4,10 +4,10 @@ CFLAGS = -Wall -Wextra -std=c99
 all: clean server client
 
 server: ./src/server/*.c
-	${CC} ${CFLAGS} ./src/server/*.c -o ./out/server
+	${CC} ./src/server/*.c -o ./out/server
 
 client: ./src/client/*.c
-	${CC} ${CFLAGS} ./src/client/*.c -o ./out/client
+	${CC} ./src/client/*.c -o ./out/client
 
 clean: cleanserver cleanclient
 
