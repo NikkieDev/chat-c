@@ -19,20 +19,20 @@ int main(int argc, char **argv) // argv is array of arrays of chars meaning stri
 		exitc(arg_desc, "INVALID_ARGUMENTS");
 	
 	int socket_fd = start_server(port);
-	int listening = listen(socket_fd, MAX_USERS);
+	
 	int users = 0;
+	listening:
+	listen(socket_fd, MAX_USERS);
+	int listening = accept(socket_fd, 0, 0);
 
-	while (listening == 0)
-	{
-		pthread_t thid;
-		client user = {
-			.num = users+1,
-			.socket_fd = socket_fd,
-			.client_fd = accept(socket_fd, 0, 0)
-		};
+	++users;
+	pthread_t thid;
+	client user = {
+		.num = users,
+		.socket_fd = socket_fd,
+	};
 
-		pthread_create(&thid, NULL, accept_user, &user);
-		pthread_join(thid, NULL);
-		users++;
-	}
+	pthread_create(&thid, NULL, accept_user, &user);
+	pthread_join(thid, NULL);
+	goto listening;
 }

@@ -28,20 +28,40 @@ signed int start_server(int port)
   return s;
 }
 
+void listen_user(char **dest, client *user)
+{
+  recv(user->socket_fd, user->buffer, sizeof(user->buffer), 0);
+  
+  user->buffer[strlen(user->buffer)+1] = '\0';
+  strncpy(dest, user->buffer, sizeof(dest));
+
+  return;
+}
+
 void accept_user(client *user)
 {
-  printf("accepted: %d\n", user->num);
+  printf("Client %d has joined\n", user->num);
 
-  // while (user->socket_fd > 0)
-  // {
-  //   recv(user->socket_fd, user->buffer, sizeof(user->buffer), 0);
-  //   if (strncmp(user->buffer, "quit", 5) == 0)
-  //   {
-  //     printf("received quit from user, disconnecting user.");
-  //     close(user->socket_fd);
-  //     pthread_exit(NULL);
-  //   }
-  // }
+  char buffer[sizeof(user->buffer)];
+  listen_user(&buffer, &user);
+  printf("%s", buffer);
+  
+  if (strncmp(buffer, "quit", 4) == 0)
+  {
+    memset(buffer, 0, sizeof(buffer));
+    printf("Closing user...\n");
 
-  pthread_exit(NULL);
+    close(user->socket_fd);
+    return;
+  } else
+  {
+    char output_buffer[sizeof(buffer)+sizeof(user->num)+12];
+    snprintf(output_buffer, sizeof(output_buffer), "[client]: %s\n", user->buffer);
+    printf(output_buffer);
+
+    listen_user(&buffer, user);
+    fflush(stdout);
+  }
+
+  return;
 }

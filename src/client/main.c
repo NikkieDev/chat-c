@@ -5,22 +5,50 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+void write_server(int sock_fd)
+{
+  char buffer[256];
+  char input[16];
+
+  scanf("%s", input);
+	strncpy(buffer, input, sizeof(buffer));
+	send(sock_fd, buffer, sizeof(buffer), 0);
+  return;
+}
+
+int try_connect(int ports[5])
+{
+  for (size_t i = 0; i < 5; i++)
+  {
+    struct sockaddr_in addr = {.sin_family = AF_INET, .sin_port = htons(ports[i])};
+    inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
+
+    int s = socket(AF_INET, SOCK_STREAM, 0);
+    int socket_fd = connect(s, &addr, sizeof(addr));
+    
+    if (socket_fd < 0)
+      continue;
+    else
+    {
+      fprintf(stdout, "Connecting to [*:%d]\n", ports[i]);
+      return s;
+    }
+  }
+
+  printf("Couldn't connect to server.\n");
+  return -1;
+}
 
 int main(int argc, char **argv)
 {
-  struct sockaddr_in addr = {.sin_family = AF_INET, .sin_port = htons(3001)};
+  int ports[5] = {3000, 3001, 3002, 3003, 30009};
 
-  inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
-  int s = socket(AF_INET, SOCK_STREAM, 0);
-  int socket_fd = connect(s, &addr, sizeof(addr));
-  char buffer[256] = {0};
-
-  strncpy(buffer, "Hello, World!\0", 64);
-  puts("Sending Hello, World! To server\n");
-  send(s, buffer, sizeof(buffer), 0);
-  puts("sending exit!");
-  strncpy(buffer, "quit\0", sizeof("quit\0"));
-  send(s, buffer, sizeof(buffer), 0);
+  int s = try_connect(ports);
+	
+  while(1 && s >= 0)
+  {
+    write_server(s);
+  }
 
   close(s);
 }
