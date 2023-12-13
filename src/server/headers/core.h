@@ -9,7 +9,8 @@ void write_dump(char *m);
 typedef struct client {
   int socket_fd;
   int num;
-  char buffer[256];
+  char *buffer[2];
+  char name[32];
   pthread_t thid;
 } client;
 

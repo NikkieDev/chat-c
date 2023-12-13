@@ -8,6 +8,12 @@ int arg_parse(int argc, char **argv, __uint32_t *port)
 {
 	char *non_nums;
 
+	if (argc <= 1)
+	{
+		*port = 3000;
+		return 1;
+	}
+
 	for (int i = 0; i < argc; i++)
 	{
 		// fprintf(stdout, "checking '%s'\n", argv[i]);
