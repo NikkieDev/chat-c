@@ -81,7 +81,7 @@ int try_persistent(int ports[5]) // network.h
 }
 
 
-int main(void)
+int main(void) // make windows client as well
 {
   int ports[5] = {3000, 3001, 3002, 3003, 30009};
 
