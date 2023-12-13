@@ -1,3 +1,5 @@
+#include <pthread.h>
+
 #ifndef CORE_H
 #define CORE_H
 
@@ -7,7 +9,8 @@ void write_dump(char *m);
 typedef struct client {
   int socket_fd;
   int num;
-  char buffer[256]
+  char buffer[256];
+  pthread_t thid;
 } client;
 
 #endif // CORE_H

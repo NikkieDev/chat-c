@@ -1,6 +1,7 @@
 #include "headers/network.h"
 #include "headers/core.h"
 #include <stdio.h>
+#include <pthread.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <string.h>
@@ -28,40 +29,45 @@ signed int start_server(int port)
   return s;
 }
 
-void listen_user(char **dest, client *user)
+struct listener 
 {
-  recv(user->socket_fd, user->buffer, sizeof(user->buffer), 0);
-  
-  user->buffer[strlen(user->buffer)+1] = '\0';
-  strncpy(dest, user->buffer, sizeof(dest));
+  client *user;
+  char dest[256];
+} listener;
 
-  return;
+void listen_user(struct listener *listen)
+{
+  recv(listen->user->socket_fd, listen->user->buffer, sizeof(listen->user->buffer), 0);
+  
+  if (strlen(listen->user->buffer) >= 256)
+  {
+    exitc(-11, "BUFFER_OVERFLOW");
+  }
+
+  listen->user->buffer[strlen(listen->user->buffer)] = '\0';
+  strncpy(listen->dest, listen->user->buffer, sizeof(listen->dest));
+  fflush(stdin);
+  fflush(stdout);
+
+  return 0;
 }
 
 void accept_user(client *user)
 {
-  printf("Client %d has joined\n", user->num);
+  pthread_t thid;
 
-  char buffer[sizeof(user->buffer)];
-  listen_user(&buffer, &user);
-  printf("%s", buffer);
+  struct listener listen = {
+    .user = user
+  };
+
+  printf("New user connected\n");
+
+  listen_user(&listen);
+  printf("client-%d: %s\n", user->num, listen.dest);
+
+  close(user->socket_fd);
+  printf("User disconnected\n");
   
-  if (strncmp(buffer, "quit", 4) == 0)
-  {
-    memset(buffer, 0, sizeof(buffer));
-    printf("Closing user...\n");
-
-    close(user->socket_fd);
-    return;
-  } else
-  {
-    char output_buffer[sizeof(buffer)+sizeof(user->num)+12];
-    snprintf(output_buffer, sizeof(output_buffer), "[client]: %s\n", user->buffer);
-    printf(output_buffer);
-
-    listen_user(&buffer, user);
-    fflush(stdout);
-  }
-
+  pthread_exit(user->thid);
   return;
 }

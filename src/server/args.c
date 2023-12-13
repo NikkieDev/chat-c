@@ -6,24 +6,30 @@
 
 int arg_parse(int argc, char **argv, __uint32_t *port)
 {
-	if (argc <= 2)
-		return -2;
+	char *non_nums;
 
 	for (int i = 0; i < argc; i++)
 	{
 		// fprintf(stdout, "checking '%s'\n", argv[i]);
 		if (strncmp(argv[i], "-p", 2) == 0)
 		{
+			if (argc <= 2)
+					return -2;
+
 			char start[6];
 			char *portStr = argv[++i];
-			char *endPtr;
 			--i;
 
 			start[0] = '\0';
 
 			strncpy(start, portStr, sizeof(start)-1);
-			*port = strtol(start, &endPtr, 10); // endPtr = first character in the string that couldn't be converted *1
+			*port = strtol(start, &non_nums, 10); // non_nums points to first character in the string that couldn't be converted *1
 			
+			if (port_parse(*port) <= 0)
+				return -1;
+		} else if (strtol(argv[i], &non_nums, 10) != 0 && *port == 0)
+		{
+			*port = strtol(argv[i], &non_nums, 10);
 			if (port_parse(*port) <= 0)
 				return -1;
 		}

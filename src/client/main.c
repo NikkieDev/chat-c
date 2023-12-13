@@ -7,16 +7,16 @@
 
 void write_server(int sock_fd)
 {
-  char buffer[256];
-  char input[16];
+  char buffer[32];
 
-  scanf("%s", input);
-	strncpy(buffer, input, sizeof(buffer));
-	send(sock_fd, buffer, sizeof(buffer), 0);
+  scanf("%16s", buffer);
+	int was_send = send(sock_fd, buffer, strlen(buffer), 0);
+  printf("%s has been send: %d\n", buffer, was_send);
+
   return;
 }
 
-int try_connect(int ports[5])
+int try_connect(int ports[5], int persistent)
 {
   for (size_t i = 0; i < 5; i++)
   {
@@ -30,25 +30,40 @@ int try_connect(int ports[5])
       continue;
     else
     {
-      fprintf(stdout, "Connecting to [*:%d]\n", ports[i]);
+      printf("Connecting to [*:%d]\n", ports[i]);
       return s;
     }
   }
 
-  printf("Couldn't connect to server.\n");
+  persistent == 0 ? printf("Couldn't connect to server.\n"):NULL;
   return -1;
+}
+
+int try_persistent(int ports[5])
+{
+  int s = try_connect(ports, 1);
+
+  while (s <= 0)
+  {
+    printf("Trying to connect..\n");
+    fflush(stdout);
+    s = try_connect(ports, 1);
+    
+    sleep(1);
+  }
+
+  return s;
 }
 
 int main(int argc, char **argv)
 {
   int ports[5] = {3000, 3001, 3002, 3003, 30009};
 
-  int s = try_connect(ports);
-	
-  while(1 && s >= 0)
-  {
-    write_server(s);
-  }
+  int s = try_connect(ports, 0);
+  s = s == -1 ? try_persistent(ports):s;
+
+  printf("Connected!\n");
+  set_name(s);
 
   close(s);
 }
