@@ -23,6 +23,8 @@ int main(int argc, char **argv) // argv is array of arrays of chars meaning stri
 	int sock_fd = start_server(port);
 	
 	
+	// make multithreaded
+	// move into user.h or network.h
 	while (1)
 	{
 		listen(sock_fd, MAX_USERS);
