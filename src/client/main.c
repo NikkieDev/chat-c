@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-void write_server(int sock_fd, char *type, char *buffer)
+void write_server(int sock_fd, char *type, char *buffer) // network.h
 {
   char cache[2][33];
 
@@ -30,7 +30,7 @@ void write_server(int sock_fd, char *type, char *buffer)
   return;
 }
 
-void set_name(int sock_fd)
+void set_name(int sock_fd) // call before connect + user.h
 {
   char name[17];
 
@@ -41,7 +41,7 @@ void set_name(int sock_fd)
   return;
 }
 
-int try_connect(int ports[5], int persistent)
+int try_connect(int ports[5], int persistent) // network.h
 {
   for (size_t i = 0; i < 5; i++)
   {
@@ -64,7 +64,7 @@ int try_connect(int ports[5], int persistent)
   return -1;
 }
 
-int try_persistent(int ports[5])
+int try_persistent(int ports[5]) // network.h
 {
   int s = try_connect(ports, 1);
 
