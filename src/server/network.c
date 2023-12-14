@@ -52,16 +52,14 @@ signed int start_server(int port)
   return s;
 }
 
-pthread_t cthreadwlistener(void *__func, struct listener __listener, int _join)
+pthread_t cthreadwlistener(void *__func, struct listener *__listenerPtr, int _join)
 {
   pthread_t thid;
-  struct listener *listenerPtr = &__listener;
+  pthread_create(__listenerPtr->l_thread, NULL, __func, __listenerPtr);
   
-  pthread_create(listenerPtr->l_thread, NULL, __func, listenerPtr);
-
   if (_join)
   {
-    pthread_join(*listenerPtr->l_thread, NULL);
+    pthread_join(*__listenerPtr->l_thread, NULL);
   }
 
   return thid;
@@ -80,8 +78,8 @@ void accept_user(client *user)
   listenPtr->l_thread = &thid;
 
   // segfault
-  cthreadwlistener(&listen_user, *listenPtr, 1);
-  cthreadwlistener(&parse_input, *listenPtr, 1);
+  cthreadwlistener(&listen_user, listenPtr, 1);
+  cthreadwlistener(&parse_input, listenPtr, 1);
 
   printf("\033[0;31mUser data:\n\t[NAME]: %s\n\033[0m", listenPtr->user->name);
 
