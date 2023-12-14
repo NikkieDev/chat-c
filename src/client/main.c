@@ -5,20 +5,16 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+
 void write_server(int sock_fd, char *type, char *buffer) // network.h
 {
-  char cache[2][33];
+  char cache[2][128];
 
   printf("Allocating for [Type: %s; Data: %s]\n", type, buffer);
   fflush(stdout);
 
   strncpy(cache[0], type, sizeof(cache[0]));
   strncpy(cache[1], buffer, sizeof(cache[1]));
-
-  for (size_t i = 0; i < 2;i++)
-  {
-    printf("%d, Size: %zu, Value: %s\n", i, strlen(cache[i]), cache[i]);
-  }
 
   size_t cache_len = sizeof(cache);
   char sendStr[128];

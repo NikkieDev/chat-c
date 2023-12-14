@@ -9,7 +9,7 @@
 struct listener 
 {
   client *user;
-  char dest[2][33];
+  char dest[10][2][33];
   pthread_t *l_thread;
 };
 
