@@ -1,4 +1,5 @@
 #include "core.h"
+#include <pthread.h>
 
 #pragma once
 
@@ -9,9 +10,10 @@ struct listener
 {
   client *user;
   char dest[2][33];
+  pthread_t l_thread;
 };
 
-void parse_input(struct listener listen);
+void parse_input(struct listener *listen);
 void listen_user(struct listener *listen);
 
 #endif // USER_H

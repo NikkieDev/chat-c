@@ -1,5 +1,5 @@
 cc = gcc
-CFLAGS = -Wall -Wextra -std=c99
+CFLAGS = -w -std=c99
 
 all: clean server client
 

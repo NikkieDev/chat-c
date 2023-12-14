@@ -1,17 +1,19 @@
 #include "headers/user.h"
 #include <stdio.h>
+#include <string.h>
 
-void parse_input(struct listener listen) // relocate into user.c
+void parse_input(struct listener *listenPtr) // relocate into user.c
 {
+  struct listener listen = *listenPtr;
   const char *type = listen.dest[0];
   const char *data = listen.dest[1];
-  struct listener *listenPtr = &listen;
 
   if (strncmp(type, "name", sizeof(type)) == 0)
   {
     strncpy(listenPtr->user->name, data, sizeof(listenPtr->user->name));
   }
 
+  pthread_exit(listenPtr->l_thread);
   return;
 }
 
@@ -20,7 +22,7 @@ void listen_user(struct listener *listen)
 {
   recv(listen->user->socket_fd, listen->dest, sizeof(listen->dest), 0);
   
-  if (sizeof(listen->dest) >= 256)
+  if (sizeof(listen->dest) >= (sizeof(listen->dest[0]) * 256))
   {
     exitc(-11, "BUFFER_OVERFLOW");
   }
@@ -28,5 +30,6 @@ void listen_user(struct listener *listen)
   fflush(stdin);
   fflush(stdout);
 
-  return 0;
+  pthread_exit(listen->l_thread);
+  return;
 }

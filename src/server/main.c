@@ -22,7 +22,6 @@ int main(int argc, char **argv) // argv is array of arrays of chars meaning stri
 	
 	int sock_fd = start_server(port);
 	
-	
 	// make multithreaded
 	// move into user.h or network.h
 	while (1)
@@ -38,8 +37,6 @@ int main(int argc, char **argv) // argv is array of arrays of chars meaning stri
 			.thid = thid
 		};
 
-		// accept_user(&user);
 		pthread_create(&thid, NULL, accept_user, &user);
-		pthread_join(&thid, NULL);
 	}
 }
