@@ -10,7 +10,7 @@ struct listener
 {
   client *user;
   char dest[2][33];
-  pthread_t l_thread;
+  pthread_t *l_thread;
 };
 
 void parse_input(struct listener *listen);

@@ -21,6 +21,7 @@ void parse_input(struct listener *listenPtr) // relocate into user.c
 void listen_user(struct listener *listen)
 {
   recv(listen->user->socket_fd, listen->dest, sizeof(listen->dest), 0);
+  printf("%s, %s\n", listen->dest[0], listen->dest[1]);
   
   if (sizeof(listen->dest) >= (sizeof(listen->dest[0]) * 256))
   {
@@ -29,7 +30,7 @@ void listen_user(struct listener *listen)
 
   fflush(stdin);
   fflush(stdout);
-
+ // return the listen->dest into something. Copy it don't return;
   pthread_exit(listen->l_thread);
   return;
 }

@@ -52,13 +52,18 @@ signed int start_server(int port)
   return s;
 }
 
-pthread_t cthreadwlistener(void *__func, client *__user)
+pthread_t cthreadwlistener(void *__func, struct listener __listener, int _join)
 {
   pthread_t thid;
-  struct listener __listener = {.user = __user, .l_thread = thid};
   struct listener *listenerPtr = &__listener;
   
-  pthread_create(&listenerPtr->l_thread, NULL, __func, listenerPtr);
+  pthread_create(listenerPtr->l_thread, NULL, __func, listenerPtr);
+
+  if (_join)
+  {
+    pthread_join(*listenerPtr->l_thread, NULL);
+  }
+
   return thid;
 }
 
@@ -75,15 +80,13 @@ void accept_user(client *user)
   listenPtr->l_thread = &thid;
 
   // segfault
-  cthreadwlistener(&listen_user, &listenPtr->user);
-  cthreadwlistener(&parse_input, &listenPtr->user);
+  cthreadwlistener(&listen_user, *listenPtr, 1);
+  cthreadwlistener(&parse_input, *listenPtr, 1);
 
-  printf("Thread value: %ld", thid);
-  
-  printf("\033[0;31mUser data:\n\t[NAME]: %s\n\033[0m", user->name);
+  printf("\033[0;31mUser data:\n\t[NAME]: %s\n\033[0m", listenPtr->user->name);
 
   close(user->socket_fd);
-  printf("%s disconnected\n", user->name);
+  printf("%s disconnected\n", listenPtr->user->name);
   
   pthread_exit(user->thid);
   return;
