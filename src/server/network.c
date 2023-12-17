@@ -28,7 +28,7 @@ unsigned int try_bind(int *sock, struct sockaddr_in addr, int port)
   int tried = bind(*sock, addrPtr, sizeof(addr));
   if (port == 65353)
   {
-    printf("no available ports. Exiting..");
+    printf("No available ports. Exiting..\n");
     exit(0);
   }
   if (tried == -1)
