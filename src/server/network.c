@@ -26,7 +26,11 @@ unsigned int try_bind(int *sock, struct sockaddr_in addr, int port)
   addrPtr->sin_port = htons(port);
 
   int tried = bind(*sock, addrPtr, sizeof(addr));
-
+  if (port == 65353)
+  {
+    printf("no available ports. Exiting..");
+    exit(0);
+  }
   if (tried == -1)
   {
     printf("Couldn't bind to [*:%d], binding to [*:%d]\n", port, port+1);
