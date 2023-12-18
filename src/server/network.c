@@ -71,8 +71,7 @@ pthread_t cthreadwlistener(void *__func, struct listener *__listenerPtr, int _jo
 
 void accept_user(client *user)
 {
-  pthread_t thid, thid2;
-  pthread_t thread_list[2];
+  pthread_t thid;
 
   struct listener listen = {
     .user = user
@@ -83,16 +82,8 @@ void accept_user(client *user)
 
   cthreadwlistener(&listen_user, listenPtr, 1);
   cthreadwlistener(&parse_input, listenPtr, 1);
-
-  cthreadwlistener(&listen_user, listenPtr, 1);
-  cthreadwlistener(&parse_input, listenPtr, 1);
-  printf("[%s]: %s\n", listenPtr->user->name, listenPtr->recent_msg);
-
-  char buffer[2][384*4];
-  strncpy(buffer[0], listenPtr->user->name, 32);
-  strncpy(buffer[1], listenPtr->recent_msg, 128);
-
-  send(listenPtr->user->socket_fd, buffer, sizeof(buffer), 0);
+  
+  read_chat(listenPtr);
 
   close(user->socket_fd);
   printf("%s disconnected\n", listenPtr->user->name);

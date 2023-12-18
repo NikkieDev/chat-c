@@ -26,3 +26,17 @@ void listen_user(struct listener *listen)
   pthread_exit(listen->l_thread);
   return;
 }
+
+void read_chat(struct listener *listenPtr)
+{
+  cthreadwlistener(&listen_user, listenPtr, 1);
+  cthreadwlistener(&parse_input, listenPtr, 1);
+  printf("[%s]: %s\n", listenPtr->user->name, listenPtr->recent_msg);
+
+  char buffer[2][128*sizeof(char)];
+  strncpy(buffer[0], listenPtr->user->name, 32);
+  strncpy(buffer[1], listenPtr->recent_msg, 128);
+
+  send(listenPtr->user->socket_fd, buffer, sizeof(buffer), 0);
+  return;
+}
