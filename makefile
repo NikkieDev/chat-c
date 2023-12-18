@@ -4,10 +4,10 @@ CFLAGS = -w -std=c99
 all: clean server client
 
 server: ./src/server/*.c
-	${CC} ${CFLAGS} ./src/server/*.c -o ./out/server_c
+	${CC} ${CFLAGS} ./src/server/*.c -o ./out/server
 
-client: ./src/client/C_CPP/*.c
-	${CC} ${CFLAGS} ./src/client/C_CPP/*.c -o ./out/client_c
+client: ./src/client/linux/*.c
+	${CC} ${CFLAGS} ./src/client/linux/*.c -o ./out/linux/client
 
 clean: cleanserver cleanclient
 
@@ -15,4 +15,4 @@ cleanserver:
 	rm -f ./out/server_c
 
 cleanclient:
-	rm -f ./out/client_c
+	rm -f ./out/linux/client
