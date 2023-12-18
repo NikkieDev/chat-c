@@ -4,7 +4,6 @@
 #define CORE_H
 
 void exitc(signed int ecode, char *m);
-void write_dump(char *m);
 
 typedef struct client {
   int socket_fd;

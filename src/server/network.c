@@ -81,15 +81,19 @@ void accept_user(client *user)
   struct listener *listenPtr = &listen;
   listenPtr->l_thread = &thid;
 
-  // segfault
   cthreadwlistener(&listen_user, listenPtr, 1);
   cthreadwlistener(&parse_input, listenPtr, 1);
 
-  printf("\033[0;31mUser data:\n\t[NAME]: %s\n\033[0m", listenPtr->user->name);
+  cthreadwlistener(&listen_user, listenPtr, 1);
+  cthreadwlistener(&parse_input, listenPtr, 1);
+  printf("[%s]: %s\n", listenPtr->user->name, listenPtr->recent_msg);
+
+  char buffer[2][384*4];
+  strncpy(buffer[0], listenPtr->user->name, 32);
+  strncpy(buffer[1], listenPtr->recent_msg, 128);
+
+  send(listenPtr->user->socket_fd, buffer, sizeof(buffer), 0);
 
   close(user->socket_fd);
   printf("%s disconnected\n", listenPtr->user->name);
-  
-  pthread_exit(user->thid);
-  return;
 }

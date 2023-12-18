@@ -9,14 +9,13 @@ void parse_input(struct listener *listenPtr) // relocate into user.c
   const char *data = listen.dest[1];
 
   if (strncmp(type, "name", sizeof(type)) == 0)
-  {
     strncpy(listenPtr->user->name, data, sizeof(listenPtr->user->name));
-  }
+  else if (strncmp(type, "msg", sizeof(type)) == 0)
+    strncpy(listenPtr->recent_msg, data, sizeof(listenPtr->recent_msg));
 
   pthread_exit(listenPtr->l_thread);
   return;
 }
-
 
 void listen_user(struct listener *listen)
 {

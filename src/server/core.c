@@ -7,8 +7,3 @@ void exitc(signed int exitcode, char *message)
 	printf("[%d] %s\n", exitcode, message);
 	exit(exitcode);
 };
-
-void write_dump(char *message)
-{
-
-}
