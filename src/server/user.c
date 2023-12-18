@@ -21,7 +21,6 @@ void parse_input(struct listener *listenPtr) // relocate into user.c
 void listen_user(struct listener *listen)
 {
   recv(listen->user->socket_fd, listen->dest, sizeof(listen->dest), 0);
-  printf("%s,%s\n", listen->dest[0], listen->dest[1]);
 
   fflush(stdin);
   fflush(stdout);
