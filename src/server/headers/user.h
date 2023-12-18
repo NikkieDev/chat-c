@@ -16,5 +16,6 @@ struct listener
 
 void parse_input(struct listener *listen);
 void listen_user(struct listener *listen);
+void read_chat(struct listener *listenPtr);
 
 #endif // USER_H
