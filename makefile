@@ -1,5 +1,5 @@
 cc = gcc
-CFLAGS = -w -std=c99
+CFLAGS = -w -std=c99 -pthread
 
 all: clean server client
 
