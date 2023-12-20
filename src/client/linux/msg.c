@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "headers/network.h"
 
 void set_name(int sock_fd) // call before connect + user.h
 {
@@ -22,14 +23,27 @@ void send_msg(int sock_fd, char *msg)
   }
 }
 
+void send_close(int sock_fd)
+{
+    const char *msg = "GRCFL";
+    write_server(sock_fd, "close", msg);
+    printf("Connection closed");
+    return;
+}
+
 void listen_messages(int sock_fd)
 {
-  char msg[128];
   size_t bufsize = 128;
+  char msg[bufsize];
 
   fgets(msg, bufsize, stdin);
-  msg[sizeof(msg)] = NULL;
-  send_msg(sock_fd, msg);
+  msg[sizeof(msg)] = "\0";
+
+  if (strncmp(msg, "close", 5) == 0) {
+    send_close(sock_fd);
+  } else {
+    send_msg(sock_fd, msg);
+  }
 
   return;
 }

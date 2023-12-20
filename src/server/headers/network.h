@@ -7,5 +7,6 @@
 int port_parse(int port);
 int start_server(int port);
 void accept_user(client *u);
+void close_socket(client *u);
 
 #endif // NETWORK_H

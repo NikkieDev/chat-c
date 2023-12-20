@@ -15,8 +15,8 @@ void write_server(int sock_fd, char *type, char *buffer) // network.h
 
   size_t cache_len = sizeof(cache);
   char sendStr[128];
-
-	int was_send = send(sock_fd, cache, cache_len, 0);
+  
+  int was_send = send(sock_fd, cache, cache_len, 0);
   return;
 }
 

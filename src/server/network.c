@@ -56,19 +56,6 @@ signed int start_server(int port)
   return s;
 }
 
-pthread_t cthreadwlistener(void *__func, struct listener *__listenerPtr, int _join)
-{
-  pthread_t thid;
-  pthread_create(__listenerPtr->l_thread, NULL, __func, __listenerPtr);
-  
-  if (_join)
-  {
-    pthread_join(*__listenerPtr->l_thread, NULL);
-  }
-
-  return thid;
-}
-
 void accept_user(client *user)
 {
   pthread_t thid;
@@ -80,11 +67,13 @@ void accept_user(client *user)
   struct listener *listenPtr = &listen;
   listenPtr->l_thread = &thid;
 
-  cthreadwlistener(&listen_user, listenPtr, 1);
-  cthreadwlistener(&parse_input, listenPtr, 1);
+  if (user->socket_fd > -1)
+    read_chat(listenPtr);
   
-  read_chat(listenPtr);
+}
 
+void close_socket(client *user)
+{
   close(user->socket_fd);
-  printf("%s disconnected\n", listenPtr->user->name);
+  printf("%s disconnected", user->name);
 }
