@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <arpa/inet.h>
 
-void write_server(int sock_fd, char *type, char *buffer) // network.h
+int write_server(int sock_fd, char *type, char *buffer) // network.h
 {
   char cache[2][128];
 
@@ -17,7 +17,7 @@ void write_server(int sock_fd, char *type, char *buffer) // network.h
   char sendStr[128];
   
   int was_send = send(sock_fd, cache, cache_len, 0);
-  return;
+  return was_send;
 }
 
 int try_connect(int *ports, int persistent) // network.h

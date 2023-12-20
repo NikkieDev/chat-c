@@ -1,5 +1,5 @@
 #include <pthread.h>
-
+#include "datatypes.h"
 
 #ifndef USER_H
 #define USER_H

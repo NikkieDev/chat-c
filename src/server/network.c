@@ -1,6 +1,7 @@
 #include "headers/network.h"
 #include "headers/core.h"
 #include "headers/user.h"
+#include "headers/datatypes.h"
 
 #include <stdio.h>
 #include <pthread.h>
@@ -69,11 +70,12 @@ void accept_user(client *user)
 
   if (user->socket_fd > -1)
     read_chat(listenPtr);
-  
 }
 
-void close_socket(client *user)
+void close_socket(struct listener *listenPtr)
 {
-  close(user->socket_fd);
-  printf("%s disconnected", user->name);
+  fprintf(stdout, "Received closing! \n");
+  close(listenPtr->user->socket_fd);
+  printf("%s disconnected\n", listenPtr->user->name);
+  pthread_exit(listenPtr->l_thread);
 }
